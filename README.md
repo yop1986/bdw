@@ -1,6 +1,6 @@
 #Banco de Desarrollo Web
 
-![BDW](/Anexos/presupuesto_familiar.jpg "Banco de Desarrollo Web")
+![BDW](/Anexos/bdw-logo.png "Banco de Desarrollo Web")
 
 
 ## Indice
