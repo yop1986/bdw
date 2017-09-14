@@ -22,13 +22,13 @@ CREATE TABLE cuentas (
     cuenta varchar(8) COLLATE utf8_spanish_ci NOT NULL,
     balance decimal(15,2) NOT NULL,
     reserva decimal(15,2) NOT NULL DEFAULT '0.00',
-    usuario_id smallint UNSIGNED,
     creado datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT cuentas_pk_id PRIMARY KEY (id),
-    CONSTRAINT cuentas_unq_cuenta UNIQUE (cuenta),
-    CONSTRAINT cuentas_fk_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    CONSTRAINT cuentas_unq_cuenta UNIQUE (cuenta)
 );
+#ALTER TABLE cuentas DROP FOREIGN KEY cuentas_fk_usuario
+#ALTER TABLE cuentas DROP COLUMN usuario_id
 
 CREATE TABLE transacciones (
     id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
