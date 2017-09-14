@@ -21,7 +21,7 @@ CREATE TABLE cuentas (
     nombre varchar(30) COLLATE utf8_spanish_ci NOT NULL,
     cuenta varchar(8) COLLATE utf8_spanish_ci NOT NULL,
     balance decimal(15,2) NOT NULL,
-    reserva decimal(15,2) NOT NULL DEFAULT '0.00'
+    reserva decimal(15,2) NOT NULL DEFAULT '0.00',
     usuario_id smallint UNSIGNED,
     creado datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
