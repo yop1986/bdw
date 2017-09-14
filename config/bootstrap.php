@@ -94,7 +94,7 @@ if (Configure::read('debug')) {
  * choice but using UTC makes time calculations / conversions easier.
  * Check http://php.net/manual/en/timezones.php for list of valid timezone strings.
  */
-date_default_timezone_set('UTC');
+date_default_timezone_set('America/Guatemala');
 
 /*
  * Configure the mbstring extension to use the correct encoding.
@@ -197,6 +197,8 @@ Type::build('timestamp')
 //Inflector::rules('irregular', ['red' => 'redlings']);
 //Inflector::rules('uninflected', ['dontinflectme']);
 //Inflector::rules('transliteration', ['/å/' => 'aa']);
+Inflector::rules('singular', ['/(.*)res$/i' => '\1r', '/(.*)nes$/i' => '\1n', '/(.*)des$/i' => '\1d', '/(.*)ses$/i' => '\1s']);
+Inflector::rules('plural', ['/(.*)r$/i' => '\1res', '/(.*)n$/i' => '\1nes', '/(.*)d$/i' => '\1des', '/(.*)s$/i' => '\1ses']);
 
 /*
  * Plugins need to be loaded manually, you can either load them one by one or all of them in a single call
