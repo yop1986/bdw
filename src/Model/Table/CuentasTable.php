@@ -9,7 +9,6 @@ use Cake\Validation\Validator;
 /**
  * Cuentas Model
  *
- * @property \App\Model\Table\UsuariosTable|\Cake\ORM\Association\BelongsTo $Usuarios
  * @property \App\Model\Table\TransaccionesTable|\Cake\ORM\Association\HasMany $Transacciones
  *
  * @method \App\Model\Entity\Cuenta get($primaryKey, $options = [])
@@ -37,9 +36,6 @@ class CuentasTable extends Table
         $this->setDisplayField('cuenta');
         $this->setPrimaryKey('id');
 
-        $this->belongsTo('Usuarios', [
-            'foreignKey' => 'usuario_id'
-        ]);
         $this->hasMany('Transacciones', [
             'foreignKey' => 'cuenta_id'
         ]);
@@ -96,7 +92,6 @@ class CuentasTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['cuenta']));
-        $rules->add($rules->existsIn(['usuario_id'], 'Usuarios'));
 
         return $rules;
     }

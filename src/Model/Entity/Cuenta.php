@@ -11,10 +11,8 @@ use Cake\ORM\Entity;
  * @property string $cuenta
  * @property float $balance
  * @property float $reserva
- * @property int $usuario_id
  * @property \Cake\I18n\FrozenTime $creado
  *
- * @property \App\Model\Entity\Usuario $usuario
  * @property \App\Model\Entity\Transaccion[] $transacciones
  */
 class Cuenta extends Entity
