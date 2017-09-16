@@ -9,7 +9,7 @@ use Cake\Validation\Validator;
 /**
  * Usuarios Model
  *
- * @property \App\Model\Table\CuentasTable|\Cake\ORM\Association\HasMany $Cuentas
+ * @property \App\Model\Table\CuentasTable|\Cake\ORM\Association\BelongsToMany $Cuentas
  *
  * @method \App\Model\Entity\Usuario get($primaryKey, $options = [])
  * @method \App\Model\Entity\Usuario newEntity($data = null, array $options = [])
@@ -36,8 +36,10 @@ class UsuariosTable extends Table
         $this->setDisplayField('nombre');
         $this->setPrimaryKey('id');
 
-        $this->hasMany('Cuentas', [
-            'foreignKey' => 'usuario_id'
+        $this->belongsToMany('Cuentas', [
+            'foreignKey' => 'usuario_id',
+            'targetForeignKey' => 'cuenta_id',
+            'joinTable' => 'cuentas_usuarios'
         ]);
     }
 
@@ -58,10 +60,10 @@ class UsuariosTable extends Table
             ->notEmpty('nombre');
 
         $validator
-            ->scalar('correo')
+            ->email('correo')
             ->requirePresence('correo', 'create')
             ->notEmpty('correo')
-            ->add('correo', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->add('correo', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => __('¡Correo ya registrado!')]);
 
         $validator
             ->scalar('telefono')
@@ -112,8 +114,8 @@ class UsuariosTable extends Table
     public function findAuth(\Cake\ORM\Query $query, array $options)
     {
         $query
-            ->select (['id', 'nombre', 'correo', 'contrasena', 'grupo'])
-            ->where (['Usuarios.activo' => 1]);
+            ->select(['id', 'nombre', 'correo', 'contrasena', 'grupo'])
+            ->where(['Usuarios.activo' => 1]);
 
         return $query;
     }

@@ -2,7 +2,9 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
 use Cake\I18n\Time;
+use Cake\ORM\TableRegistry; 
 
 /**
  * Usuarios Controller
@@ -14,6 +16,12 @@ use Cake\I18n\Time;
 class UsuariosController extends AppController
 {
 
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+
+        $this->Auth->allow(['add']);
+    }
     /**
      * Index method
      *
@@ -58,12 +66,49 @@ class UsuariosController extends AppController
             $usuario['activo'] = 0;
             $usuario['grupo'] = 'Cliente';
 
-            if ($this->Usuarios->save($usuario)) {
-                $this->Flash->success(__('The usuario has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+            $this->Cuentas = TableRegistry::get('cuentas');
+            $infoCuenta = (
+                $this->Cuentas->find()
+                    ->select(['id'])
+                    ->where(['cuentas.cuenta' => $usuario['cuenta']])
+                )->first();
+
+            if (!is_null($infoCuenta)) //existe la cuenta
+            {
+                $this->CuentasUsuarios = TableRegistry::get('cuentas_usuarios');
+                $infoAsoc = (
+                    $this->CuentasUsuarios->find()
+                        ->select(['id'])
+                        ->where(['cuentas_usuarios.cuenta_id' => $infoCuenta->id])
+                    )->first();
+
+                if (is_null($infoAsoc)) //no esta asociada la cuenta a ningun usuario
+                {
+                    unset($usuario['cuenta']);
+
+                    $data['usuario_id'] = ($this->Usuarios->save($usuario))->id;
+                    $data['cuenta_id'] = $infoCuenta->id;
+
+                    $infoAsoc = $this->CuentasUsuarios->newEntity();
+                    $infoAsoc = $this->CuentasUsuarios->patchEntity($infoAsoc, $data);
+
+                    $this->CuentasUsuarios->save($infoAsoc);
+
+                    $this->Flash->success(__('El usuario fue guardado, por favor confirme desde su correo.'));
+
+                    return $this->redirect(['action' => 'login']);
+                }
+                else
+                {
+                    $this->Flash->error(__('¡La Cuenta ya está asociada a un cliente!.'));
+                }
             }
-            $this->Flash->error(__('The usuario could not be saved. Please, try again.'));
+            else
+            {
+                $this->Flash->error(__('¡La Cuenta no existe!.'));
+            }
+
         }
         $this->set(compact('usuario'));
         $this->set('_serialize', ['usuario']);
