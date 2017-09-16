@@ -60,9 +60,10 @@ class UsuariosTable extends Table
             ->notEmpty('nombre');
 
         $validator
-            ->email('correo')
+            ->scalar('correo')
             ->requirePresence('correo', 'create')
             ->notEmpty('correo')
+            ->add('correo', 'validFormat', ['rule' => 'email', 'message' => __('¡Ingrese un correo válido!')])
             ->add('correo', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => __('¡Correo ya registrado!')]);
 
         $validator
