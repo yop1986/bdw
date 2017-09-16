@@ -10,6 +10,7 @@ use Cake\Validation\Validator;
  * Cuentas Model
  *
  * @property \App\Model\Table\TransaccionesTable|\Cake\ORM\Association\HasMany $Transacciones
+ * @property \App\Model\Table\UsuariosTable|\Cake\ORM\Association\BelongsToMany $Usuarios
  *
  * @method \App\Model\Entity\Cuenta get($primaryKey, $options = [])
  * @method \App\Model\Entity\Cuenta newEntity($data = null, array $options = [])
@@ -38,6 +39,11 @@ class CuentasTable extends Table
 
         $this->hasMany('Transacciones', [
             'foreignKey' => 'cuenta_id'
+        ]);
+        $this->belongsToMany('Usuarios', [
+            'foreignKey' => 'cuenta_id',
+            'targetForeignKey' => 'usuario_id',
+            'joinTable' => 'cuentas_usuarios'
         ]);
     }
 

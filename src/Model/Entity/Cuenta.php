@@ -14,6 +14,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $creado
  *
  * @property \App\Model\Entity\Transaccion[] $transacciones
+ * @property \App\Model\Entity\Usuario[] $usuarios
  */
 class Cuenta extends Entity
 {
