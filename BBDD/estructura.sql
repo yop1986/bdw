@@ -31,6 +31,18 @@ CREATE TABLE cuentas (
 #ALTER TABLE cuentas DROP COLUMN usuario_id
 #ALTER TABLE cuentas MODIFY COLUMN cuenta varchar(14) NOT NULL
 
+create table cuentas_usuarios (
+    id mediumint unsigned not null auto_increment,
+    cuenta_id mediumint unsigned not null, 
+    usuario_id smallint unsigned not null,
+
+    constraint ctausr_pk_id primary key (id),
+    constraint ctausr_unq_cuenta unique(cuenta_id),
+    constraint ctausr_fk_cuenta foreign key (cuenta_id) references cuentas(id),
+    constraint ctausr_fk_usuario foreign key (usuario_id) references usuarios(id)
+);
+
+
 CREATE TABLE transacciones (
     id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
     correlativo int UNSIGNED NOT NULL,
