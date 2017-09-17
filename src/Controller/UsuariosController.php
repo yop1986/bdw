@@ -181,4 +181,20 @@ class UsuariosController extends AppController
     {
         return $this->redirect($this->Auth->logout());
     }
+
+    public function changeState($id = null)
+    {
+        $usuario = $this->Usuarios->get($id);
+
+        $usuario = $this->Usuarios->patchEntity($usuario, [$usuario['activo'] = !$usuario['activo']]);
+
+        if ($this->Usuarios->save($usuario)) {
+            $this->Flash->success(__('Se ha cambiado el estado del usuario (' . $usuario['nombre'] . ').'));
+
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $this->set('usuario', $usuario);
+        $this->set('_serialize', ['usuario']);
+    }
 }
