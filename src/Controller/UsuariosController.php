@@ -186,13 +186,17 @@ class UsuariosController extends AppController
     {
         $usuario = $this->Usuarios->get($id);
 
-        $usuario = $this->Usuarios->patchEntity($usuario, [$usuario['activo'] = !$usuario['activo']]);
+        if ($usuario->grupo !== 'Administrador') {
+            $usuario = $this->Usuarios->patchEntity($usuario, [$usuario['activo'] = !$usuario['activo']]);
 
-        if ($this->Usuarios->save($usuario)) {
-            $this->Flash->success(__('Se ha cambiado el estado del usuario (' . $usuario['nombre'] . ').'));
+            if ($this->Usuarios->save($usuario))
+                $this->Flash->success(__('Se ha cambiado el estado del usuario (' . $usuario['nombre'] . ').'));
 
-            return $this->redirect(['action' => 'index']);
+        } else {
+            $this->Flash->error(__('No se puede cambiar el estado del Administrador'));
         }
+
+        return $this->redirect(['action' => 'index']);
 
         $this->set('usuario', $usuario);
         $this->set('_serialize', ['usuario']);

@@ -34,7 +34,7 @@
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $usuario->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $usuario->id]) ?>
-                    <?= $this->Html->link(__('Cambio Estado'), ['action' => 'change_state', $usuario->id]) ?>
+                    <?= $this->Html->link( $usuario->activo ? __('Inhabilitar') : __('Habilitar'), ['action' => 'change_state', $usuario->id]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
