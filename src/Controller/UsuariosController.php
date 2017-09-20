@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Event\Event;
 use Cake\I18n\Time;
+use Cake\Mailer\Email;
 use Cake\ORM\TableRegistry; 
 
 /**
@@ -70,9 +71,9 @@ class UsuariosController extends AppController
         $usuario = $this->Usuarios->newEntity();
         if ($this->request->is('post')) {
             $usuario = $this->Usuarios->patchEntity($usuario, $this->request->getData());
-            $usuario['creado'] = Time::Now();
-            $usuario['activo'] = 0;
-            $usuario['grupo'] = 'Cliente';
+            $usuario->creado = Time::Now();
+            $usuario->activo = 0;
+            $usuario->grupo = 'Cliente';
 
 
             $this->Cuentas = TableRegistry::get('cuentas');
@@ -93,7 +94,7 @@ class UsuariosController extends AppController
 
                 if (is_null($infoAsoc)) //no esta asociada la cuenta a ningun usuario
                 {
-                    unset($usuario['cuenta']);
+                    unset($usuario->cuenta);
 
                     $data['usuario_id'] = ($this->Usuarios->save($usuario))->id;
                     $data['cuenta_id'] = $infoCuenta->id;
@@ -103,8 +104,16 @@ class UsuariosController extends AppController
 
                     $this->CuentasUsuarios->save($infoAsoc);
 
-                    $this->Flash->success(__('El usuario fue guardado, por favor confirme desde su correo.'));
+                    $email = new Email();
+                    $email
+                        ->subject('Confirmación de Usuario BDW')
+                        ->template('ConfirmacionUsuario', 'default')
+                        ->emailFormat('html')
+                        ->to($usuario->correo)
+                        ->viewVars(['contenido' => ["controller" => 'Usuarios', 'action' => 'activacion-usuario', $usuario->id, substr($usuario->contrasena, 0, 10)]])
+                        ->send();
 
+                    $this->Flash->success(__('El usuario fue guardado, por favor confirme desde su correo.'));
                     return $this->redirect(['action' => 'login']);
                 }
                 else

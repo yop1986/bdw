@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Event\Event;
 use Cake\I18n\Time;
+use Cake\Mailer\Email;
 use Cake\ORM\TableRegistry; 
 
 /**
@@ -79,28 +80,39 @@ class BeneficiariosController extends AppController
             $beneficiario->usuario_id = $this->Auth->User('id');
             $beneficiario->vigente = false;
 
+            $noCuenta = $this->request->getData()['noCuenta'];
+
             $this->Cuentas = TableRegistry::get('cuentas');
-            $infoCuenta = (
+            $idCuenta = (
                 $this->Cuentas->find()
                     ->select(['id'])
-                    ->where(['cuentas.cuenta' => $this->request->getData()['noCuenta']])
+                    ->where(['cuentas.cuenta' => $noCuenta])
                 )->first();
 
-            if (!is_null($infoCuenta)) //existe la cuenta
+            if (!is_null($idCuenta)) //existe la cuenta
             {
                 $this->CuentasUsuarios = TableRegistry::get('cuentas_usuarios');
                 $infoAsoc = (
                     $this->CuentasUsuarios->find()
                         ->select(['id'])
-                        ->where(['cuentas_usuarios.cuenta_id' => $infoCuenta->id, 'cuentas_usuarios.usuario_id' => $this->Auth->User('id')])
+                        ->where(['cuentas_usuarios.cuenta_id' => $idCuenta->id, 'cuentas_usuarios.usuario_id' => $this->Auth->User('id')])
                     )->first();
 
                 if (is_null($infoAsoc)) //La cuenta no pertenece la usuario logueado
                 {
-                    $beneficiario->cuenta_id = $infoCuenta->id;
+                    $beneficiario->cuenta_id = $idCuenta->id;
                     if ($this->Beneficiarios->save($beneficiario)) {
-                        $this->Flash->success(__('The beneficiario has been saved.'));
 
+                        $email = new Email();
+                        $email
+                            ->subject('Confirmación para Asociacion de Beneficiario')
+                            ->template('confirmacion_beneficiario', 'default')
+                            ->emailFormat('html')
+                            ->to($this->Auth->User('correo'))
+                            //->viewVars(['contenido' => ["controller" => 'Beneficiarios', 'action' => 'activacion-beneficiario', $noCuenta, $beneficiario->clave]])
+                            ->send();
+
+                        $this->Flash->success(__('The beneficiario has been saved.'));
                         return $this->redirect(['action' => 'index']);
                     }
                     $this->Flash->error(__('The beneficiario could not be saved. Please, try again.'));

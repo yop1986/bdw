@@ -70,10 +70,15 @@ class CuentasController extends AppController
             'contain' => ['Usuarios']
         ]);
 
-        $grupoAuth = $this->Auth->User('grupo');
+        if($this->Auth->User('grupo') == 'Administrador' or $this->Auth->User('id') == $cuenta->usuarios[0]->id) {
+            $grupoAuth = $this->Auth->User('grupo');
 
-        $this->set(compact('cuenta', 'grupoAuth'));
-        $this->set('_serialize', ['cuenta']);
+            $this->set(compact('cuenta', 'grupoAuth'));
+            //$this->set('_serialize', ['cuenta']);
+        } else {
+            $this->Flash->error(__('¡Solamente puede ver sus propias cuentas!'));
+            $this->redirect(['action' => 'propias']);
+        }
     }
 
     /**

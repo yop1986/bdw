@@ -178,7 +178,7 @@ return [
      */
     'EmailTransport' => [
         'default' => [
-            'className' => 'Mail',
+            'className' => 'Debug',
             // The following keys are used in SMTP transports
             'host' => 'localhost',
             'port' => 25,
@@ -203,7 +203,7 @@ return [
     'Email' => [
         'default' => [
             'transport' => 'default',
-            'from' => 'you@localhost',
+            'from' => 'noresponda@bdw.com',
             //'charset' => 'utf-8',
             //'headerCharset' => 'utf-8',
         ],
