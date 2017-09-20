@@ -16,7 +16,7 @@ class CuentasController extends AppController
 
     public function isAuthorized($usuario) 
     {
-        if (in_array($this->request->getParam('action'), ['propias']))
+        if (in_array($this->request->getParam('action'), ['propias', 'view', 'edit']))
             return true;
         
         return parent::isAuthorized($usuario);
@@ -70,7 +70,9 @@ class CuentasController extends AppController
             'contain' => ['Usuarios']
         ]);
 
-        $this->set('cuenta', $cuenta);
+        $grupoAuth = $this->Auth->User('grupo');
+
+        $this->set(compact('cuenta', 'grupoAuth'));
         $this->set('_serialize', ['cuenta']);
     }
 
@@ -110,6 +112,8 @@ class CuentasController extends AppController
         $cuenta = $this->Cuentas->get($id);
         $ctaNum = $cuenta['cuenta'];
 
+        $grupoAuth = $this->Auth->User('grupo');
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $cuenta = $this->Cuentas->patchEntity($cuenta, $this->request->getData());
             $cuenta['cuenta'] = $ctaNum;
@@ -121,7 +125,7 @@ class CuentasController extends AppController
             }
             $this->Flash->error(__('The cuenta could not be saved. Please, try again.'));
         }
-        $this->set(compact('cuenta'));
+        $this->set(compact('cuenta', 'grupoAuth'));
         $this->set('_serialize', ['cuenta']);
     }
 

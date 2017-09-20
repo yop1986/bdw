@@ -29,8 +29,7 @@
                 <td><?= h($cuenta->creado) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $cuenta->id]) ?> |
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $cuenta->id]) ?> |
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $cuenta->id], ['confirm' => __('Are you sure you want to delete # {0}?', $cuenta->id)]) ?>
+                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $cuenta->id]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

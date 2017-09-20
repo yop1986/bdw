@@ -6,7 +6,7 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Cuentas'), ['action' => 'index']) ?> </li>
+        <li><?= $grupoAuth == 'Cliente' ? $this->Html->link(__('List Cuentas'), ['action' => 'propias']) : $this->Html->link(__('List Cuentas'), ['action' => 'index']) ?> </li>
     </ul>
 </nav>
 <div class="cuentas form large-9 medium-8 columns content">
