@@ -237,15 +237,17 @@ class UsuariosController extends AppController
         if (!is_null($usuario)) {
             $usuario = $this->Usuarios->patchEntity($usuario, [$usuario['activo'] = !$usuario['activo']]);
 
-            if ($this->Usuarios->save($usuario))
+            if ($this->Usuarios->save($usuario)) {
                 $this->Flash->success(__('Se ha activado el usuario (' . $usuario['nombre'] . ').'));
+                return $this->redirect(['controller' => 'Usuarios', 'action' => 'login']);
+            }
 
         } else {
             $this->Flash->error(__('No se pudo activar el usuario. Por favor, intente de nuevo.'));
+            return $this->redirect(['controller' => 'Usuarios', 'action' => 'login']);
         }
 
         $this->Flash->error(__('El enlace no se encuentra vigente, contacte al administrador.'));
-
         return $this->redirect(['controller' => 'Usuarios', 'action' => 'login']);
     }
 }
