@@ -168,6 +168,13 @@ class UsuariosController extends AppController
             if ($usuario)
             {
                 $this->Auth->setUser($usuario);
+
+                $usrLogueado = $this->request->session()->read('Auth.User');
+
+                if($usrLogueado['grupo'] == 'Administrador'){
+                    return $this->redirect(['controller' => 'Usuarios', 'action' => 'index']);
+                }
+                
                 return $this->redirect($this->Auth->redirectUrl());
             } 
             else
