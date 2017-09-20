@@ -7,12 +7,7 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Usuario'), ['action' => 'edit', $usuario->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Usuario'), ['action' => 'delete', $usuario->id], ['confirm' => __('Are you sure you want to delete # {0}?', $usuario->id)]) ?> </li>
         <li><?= $this->Html->link(__('List Usuarios'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Usuario'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Cuentas'), ['controller' => 'Cuentas', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Cuenta'), ['controller' => 'Cuentas', 'action' => 'add']) ?> </li>
     </ul>
 </nav>
 <div class="usuarios view large-9 medium-8 columns content">

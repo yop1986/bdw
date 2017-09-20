@@ -6,8 +6,11 @@
 ?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
+        <li class="heading"><?= __('Perfil') ?></li>
+        <li><?= $this->Html->link(__('Editar Perfil'), ['controller' => 'Usuarios', 'action' => 'edit']) ?></li>
+    </ul>
+    <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Usuario'), ['action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('List Cuentas'), ['controller' => 'Cuentas', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New Cuenta'), ['controller' => 'Cuentas', 'action' => 'add']) ?></li>
     </ul>
@@ -32,8 +35,7 @@
                 <td><?= h($usuario->creado) ?></td>
                 <td><?= $usuario->activo ? __('Active') : __('Deactive') ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $usuario->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $usuario->id]) ?>
+                    <?= $this->Html->link(__('View'), ['action' => 'view', $usuario->id]) ?> |
                     <?= $this->Html->link( $usuario->activo ? __('Inhabilitar') : __('Habilitar'), ['action' => 'change_state', $usuario->id]) ?>
                 </td>
             </tr>
