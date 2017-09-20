@@ -67,9 +67,11 @@ CREATE TABLE beneficiarios (
     clave varchar(15) NOT NULL,
     usuario_id smallint UNSIGNED NOT NULL,
     cuenta_id mediumint UNSIGNED NOT NULL,
+    vigente boolean NOT NULL DEFAULT false,
 
     CONSTRAINT beneficiarios_pk_id PRIMARY KEY (id),
     CONSTRAINT beneficiarios_unq_usrcta UNIQUE (usuario_id, cuenta_id),
     CONSTRAINT beneficiarios_fk_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
     CONSTRAINT beneficiarios_fk_cuenta FOREIGN key (cuenta_id) REFERENCES cuentas(id)
 );
+#alter table beneficiarios add column vigente boolean not null default false;
