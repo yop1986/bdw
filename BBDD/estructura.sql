@@ -1,5 +1,5 @@
 -- Base de datos:       dw-banco (utf8-spanish-ci)
--- Usuario/Contraseña:  
+-- Usuario/Contraseña:  usr_dwbanco / oDg3axSwtWOd3IHm
 
 CREATE TABLE usuarios (
     id smallint UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -15,6 +15,8 @@ CREATE TABLE usuarios (
     CONSTRAINT usuarios_pk_id PRIMARY KEY (id),
     CONSTRAINT usuarios_unq_correo UNIQUE (correo)
 );
+INSERT INTO `usuarios` (`id`, `nombre`, `correo`, `telefono`, `contrasena`, `creado`, `modificado`, `activo`, `grupo`) VALUES
+(1, 'Pablo Godoy', 'pablodavid36@gmail.com', '56940955', '$2y$10$wWcA6CFHg/hm1GrGJEdCcO.MCPWPWZ3QRgdnQ5jXjYeNOnc9HDCHi', '2017-09-13 23:00:49', '2017-09-13 23:07:47', 1, 'Administrador');
 
 CREATE TABLE cuentas (
     id mediumint UNSIGNED NOT NULL AUTO_INCREMENT,
