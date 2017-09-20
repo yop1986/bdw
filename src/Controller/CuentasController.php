@@ -14,6 +14,14 @@ use Cake\I18n\Time;
 class CuentasController extends AppController
 {
 
+    public function isAuthorized($usuario) 
+    {
+        if (in_array($this->request->getParam('action'), ['propias']))
+            return true;
+        
+        return parent::isAuthorized($usuario);
+    }
+
     /**
      * Index method
      *
@@ -23,6 +31,27 @@ class CuentasController extends AppController
     {
         $this->paginate = [];
         $cuentas = $this->paginate($this->Cuentas);
+
+        $this->set(compact('cuentas'));
+        $this->set('_serialize', ['cuentas']);
+    }
+
+    /**
+     * Propias method
+     *
+     * @return \Cake\Http\Response|void
+     */
+    public function propias()
+    {
+        $this->paginate = [];
+        $cuentas = $this->paginate($this->Cuentas->find('all')->join([
+            [
+                'table' => 'cuentas_usuarios', 
+                'alias' => 'CtasUsrs',
+                'type' => 'inner', 
+                'conditions' => ['CtasUsrs.cuenta_id = Cuentas.id', 'CtasUsrs.usuario_id' => $this->Auth->User('id')]
+            ]
+        ]));
 
         $this->set(compact('cuentas'));
         $this->set('_serialize', ['cuentas']);
