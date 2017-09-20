@@ -17,8 +17,7 @@ class BeneficiariosController extends AppController
 
     public function isAuthorized($usuario) 
     {
-        if (in_array($this->request->getParam('action'), ['index', 'add', 'edit', 'view', 'activacionBeneficiario']))
-            return true;
+        return true;
         
         return parent::isAuthorized($usuario);
     }

@@ -34,5 +34,9 @@
             <th scope="row"><?= __('Ultimo Proceso') ?></th>
             <td><?= h($beneficiario->ult_proceso) ?></td>
         </tr>
+        <tr>
+            <th scope="row"><?= __('Estado del Beneficiario') ?></th>
+            <td><?= $beneficiario->vigente ? __('Confirmado') : __('Pendiente de Confirmar') ?></td>
+        </tr>
     </table>
 </div>
