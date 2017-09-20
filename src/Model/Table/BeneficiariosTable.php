@@ -87,6 +87,11 @@ class BeneficiariosTable extends Table
             ->requirePresence('clave', 'create')
             ->notEmpty('clave');
 
+        $validator
+            ->boolean('vigente')
+            ->requirePresence('vigente', 'create')
+            ->notEmpty('vigente');
+
         return $validator;
     }
 

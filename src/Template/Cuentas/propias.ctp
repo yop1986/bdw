@@ -6,7 +6,11 @@
 ?>
 
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
-    
+    <ul class="side-nav">
+        <li class="heading"><?= __('Actions') ?></li>
+        <li><?= $this->Html->link(__('List Beneficiarios'), ['controller' => 'Beneficiarios', 'action' => 'index']) ?> </li>
+        <li><?= $this->Html->link(__('New Beneficiario'), ['controller' => 'Beneficiarios', 'action' => 'add']) ?> </li>
+    </ul>
 </nav>
 <div class="cuentas index large-9 medium-8 columns content">
     <h3><?= __('Cuentas Propias') ?></h3>

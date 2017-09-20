@@ -15,6 +15,7 @@ use Cake\ORM\Entity;
  * @property string $clave
  * @property int $usuario_id
  * @property int $cuenta_id
+ * @property bool $vigente
  *
  * @property \App\Model\Entity\Usuario $usuario
  * @property \App\Model\Entity\Cuenta $cuenta
@@ -40,6 +41,7 @@ class Beneficiario extends Entity
         'clave' => true,
         'usuario_id' => true,
         'cuenta_id' => true,
+        'vigente' => true,
         'usuario' => true,
         'cuenta' => true
     ];
