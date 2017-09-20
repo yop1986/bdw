@@ -176,6 +176,7 @@ class UsuariosController extends AppController
         if ($this->request->is('post'))
         {
             $usuario = $this->Auth->identify();
+
             if ($usuario)
             {
                 $this->Auth->setUser($usuario);
@@ -184,6 +185,8 @@ class UsuariosController extends AppController
 
                 if($usrLogueado['grupo'] == 'Administrador'){
                     return $this->redirect(['controller' => 'Usuarios', 'action' => 'index']);
+                } elseif ($usrLogueado['grupo'] == 'Cliente') {
+                    return $this->redirect(['controller' => 'Cuentas', 'action' => 'propias']);
                 }
                 
                 return $this->redirect($this->Auth->redirectUrl());
