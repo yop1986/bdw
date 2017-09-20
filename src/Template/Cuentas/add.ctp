@@ -6,11 +6,7 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Cuentas'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Usuarios'), ['controller' => 'Usuarios', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Usuario'), ['controller' => 'Usuarios', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Transacciones'), ['controller' => 'Transacciones', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Transaccion'), ['controller' => 'Transacciones', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('List Cuentas'), ['action' => 'index']) ?> </li>
     </ul>
 </nav>
 <div class="cuentas form large-9 medium-8 columns content">

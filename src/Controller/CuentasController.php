@@ -37,7 +37,9 @@ class CuentasController extends AppController
      */
     public function view($id = null)
     {
-        $cuenta = $this->Cuentas->get($id);
+        $cuenta = $this->Cuentas->get($id, [
+            'contain' => ['Usuarios']
+        ]);
 
         $this->set('cuenta', $cuenta);
         $this->set('_serialize', ['cuenta']);
@@ -77,8 +79,12 @@ class CuentasController extends AppController
     public function edit($id = null)
     {
         $cuenta = $this->Cuentas->get($id);
+        $ctaNum = $cuenta['cuenta'];
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $cuenta = $this->Cuentas->patchEntity($cuenta, $this->request->getData());
+            $cuenta['cuenta'] = $ctaNum;
+            
             if ($this->Cuentas->save($cuenta)) {
                 $this->Flash->success(__('The cuenta has been saved.'));
 

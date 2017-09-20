@@ -4,14 +4,11 @@
   * @var \App\Model\Entity\Cuenta[]|\Cake\Collection\CollectionInterface $cuentas
   */
 ?>
+
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Cuenta'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Usuarios'), ['controller' => 'Usuarios', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Usuario'), ['controller' => 'Usuarios', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Transacciones'), ['controller' => 'Transacciones', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Transaccion'), ['controller' => 'Transacciones', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('List Usuarios'), ['controller' => 'Usuarios', 'action' => 'index']) ?> </li>
     </ul>
 </nav>
 <div class="cuentas index large-9 medium-8 columns content">
@@ -34,8 +31,8 @@
                 <td><?= $this->Number->currency($cuenta->balance) ?></td>
                 <td><?= h($cuenta->creado) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $cuenta->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $cuenta->id]) ?>
+                    <?= $this->Html->link(__('View'), ['action' => 'view', $cuenta->id]) ?> |
+                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $cuenta->id]) ?> |
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $cuenta->id], ['confirm' => __('Are you sure you want to delete # {0}?', $cuenta->id)]) ?>
                 </td>
             </tr>

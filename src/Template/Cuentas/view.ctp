@@ -7,14 +7,7 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Cuenta'), ['action' => 'edit', $cuenta->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Cuenta'), ['action' => 'delete', $cuenta->id], ['confirm' => __('Are you sure you want to delete # {0}?', $cuenta->id)]) ?> </li>
         <li><?= $this->Html->link(__('List Cuentas'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Cuenta'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Usuarios'), ['controller' => 'Usuarios', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Usuario'), ['controller' => 'Usuarios', 'action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Transacciones'), ['controller' => 'Transacciones', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Transaccion'), ['controller' => 'Transacciones', 'action' => 'add']) ?> </li>
     </ul>
 </nav>
 <div class="cuentas view large-9 medium-8 columns content">
@@ -35,6 +28,10 @@
         <tr>
             <th scope="row"><?= __('Creado') ?></th>
             <td><?= h($cuenta->creado) ?></td>
+        </tr>
+        <tr>
+            <th scope="row"><?= __('Titular') ?></th>
+            <td><?= $cuenta->usuarios ? __($cuenta->usuarios[0]['nombre']) : __('Sin usuario asociado') ?></td>
         </tr>
     </table>
     <div class="related">
