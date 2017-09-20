@@ -33,15 +33,15 @@ CREATE TABLE cuentas (
 #ALTER TABLE cuentas DROP COLUMN usuario_id
 #ALTER TABLE cuentas MODIFY COLUMN cuenta varchar(14) NOT NULL
 
-create table cuentas_usuarios (
-    id mediumint unsigned not null auto_increment,
-    cuenta_id mediumint unsigned not null, 
-    usuario_id smallint unsigned not null,
+CREATE TABLE cuentas_usuarios (
+    id mediumint UNSIGNED NOT NULL AUTO_INCREMENT,
+    cuenta_id mediumint UNSIGNED NOT NULL, 
+    usuario_id smallint UNSIGNED NOT NULL,
 
-    constraint ctausr_pk_id primary key (id),
-    constraint ctausr_unq_cuenta unique(cuenta_id),
-    constraint ctausr_fk_cuenta foreign key (cuenta_id) references cuentas(id),
-    constraint ctausr_fk_usuario foreign key (usuario_id) references usuarios(id)
+    CONSTRAINT ctausr_pk_id PRIMARY KEY (id),
+    CONSTRAINT ctausr_unq_cuenta UNIQUE (cuenta_id),
+    CONSTRAINT ctausr_fk_cuenta FOREIGN KEY (cuenta_id) REFERENCES cuentas(id),
+    CONSTRAINT ctausr_fk_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
 
@@ -57,36 +57,19 @@ CREATE TABLE transacciones (
     CONSTRAINT transacciones_fk_cuenta FOREIGN KEY (cuenta_id) REFERENCES cuentas(id)
 );
 
+CREATE TABLE beneficiarios (
+    id mediumint UNSIGNED NOT NULL AUTO_INCREMENT,
+    monto_max decimal(15,2) UNSIGNED NOT NULL,
+    cant_max tinyint(3) UNSIGNED NOT NULL,
+    monto_acumulado decimal(15,2) UNSIGNED NOT NULL DEFAULT 0,
+    cant_acumulada tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
+    ult_proceso datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    clave varchar(15) NOT NULL,
+    usuario_id smallint UNSIGNED NOT NULL,
+    cuenta_id mediumint UNSIGNED NOT NULL,
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla beneficiarios
---
-
---  CREATE TABLE beneficiarios (
---      id int UNSIGNED NOT NULL,
---      monto_max decimal(15,2) UNSIGNED NOT NULL,
---      cant_max tinyint(3) UNSIGNED NOT NULL,
---      clave varchar(30) NOT NULL,
---      estado tinyint(1) NOT NULL DEFAULT '0',
---      usuario_id smallint UNSIGNED NOT NULL,
---      cuenta_id mediumint UNSIGNED NOT NULL
---  );
---  
---  
---  --
---  -- Indices de la tabla `beneficiarios`
---  --
---  ALTER TABLE `beneficiarios`
---    ADD PRIMARY KEY (`id`),
---    ADD KEY `beneficiarios_fk_usuario` (`usuario_id`),
---    ADD KEY `beneficiarios_fk_cuenta` (`cuenta_id`);
---
---
---  Filtros para la tabla `beneficiarios`
---
---  
---  ALTER TABLE `beneficiarios`
---    ADD CONSTRAINT `beneficiarios_fk_cuenta` FOREIGN KEY (`cuenta_id`) REFERENCES `cuentas` (`id`),
---    ADD CONSTRAINT `beneficiarios_fk_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`);
+    CONSTRAINT beneficiarios_pk_id PRIMARY KEY (id),
+    CONSTRAINT beneficiarios_unq_usrcta UNIQUE (usuario_id, cuenta_id),
+    CONSTRAINT beneficiarios_fk_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+    CONSTRAINT beneficiarios_fk_cuenta FOREIGN key (cuenta_id) REFERENCES cuentas(id)
+);
