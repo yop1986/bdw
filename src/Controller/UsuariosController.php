@@ -134,6 +134,9 @@ class UsuariosController extends AppController
         $usuario = $this->Usuarios->get($this->Auth->User('id'), [
             'contain' => []
         ]);
+
+        $grupoAuth = $this->Auth->User('grupo');
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $usuario = $this->Usuarios->patchEntity($usuario, $this->request->getData());
             $usuario['modificado'] = Time::Now();
@@ -144,7 +147,7 @@ class UsuariosController extends AppController
             }
             $this->Flash->error(__('The usuario could not be saved. Please, try again.'));
         }
-        $this->set(compact('usuario'));
+        $this->set(compact('usuario', 'grupoAuth'));
         $this->set('_serialize', ['usuario']);
     }
 
