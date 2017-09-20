@@ -20,7 +20,7 @@ class UsuariosController extends AppController
     {
         parent::beforeFilter($event);
 
-        $this->Auth->allow(['add']);
+        $this->Auth->allow(['add', 'activacionUsuario']);
     }
 
     public function isAuthorized($usuario) 
@@ -221,5 +221,31 @@ class UsuariosController extends AppController
 
         $this->set('usuario', $usuario);
         $this->set('_serialize', ['usuario']);
+    }
+
+    public function activacionUsuario($id, $clave)
+    {
+        $usuario = $this->Usuarios
+                    ->find()
+                    ->where([
+                        'usuarios.id ='.$id, 
+                        'usuarios.contrasena like' => $clave.'%', 
+                        'usuarios.activo' => false
+                    ])
+                    ->first();
+
+        if (!is_null($usuario)) {
+            $usuario = $this->Usuarios->patchEntity($usuario, [$usuario['activo'] = !$usuario['activo']]);
+
+            if ($this->Usuarios->save($usuario))
+                $this->Flash->success(__('Se ha activado el usuario (' . $usuario['nombre'] . ').'));
+
+        } else {
+            $this->Flash->error(__('No se pudo activar el usuario. Por favor, intente de nuevo.'));
+        }
+
+        $this->Flash->error(__('El enlace no se encuentra vigente, contacte al administrador.'));
+
+        return $this->redirect(['controller' => 'Usuarios', 'action' => 'login']);
     }
 }
