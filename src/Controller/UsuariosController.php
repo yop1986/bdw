@@ -22,6 +22,14 @@ class UsuariosController extends AppController
 
         $this->Auth->allow(['add']);
     }
+
+    public function isAuthorized($usuario) 
+    {
+        if (in_array($this->request->getParam('action'), ['edit', 'logout']))
+            return true;
+        
+        return parent::isAuthorized($usuario);
+    }
     /**
      * Index method
      *

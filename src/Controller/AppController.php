@@ -33,6 +33,14 @@ class AppController extends Controller
         //$this->Auth->allow();
     }
 
+    public function isAuthorized($usuario) 
+    {
+        if (isset($usuario['grupo']) && $usuario['grupo'] === 'Administrador')
+            return true;
+
+        return false;
+    }
+
     /**
      * Initialization hook method.
      *
@@ -49,6 +57,7 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
         $this->loadComponent('Auth', [
+            'authorize' => ['Controller'],
             'authenticate' => [
                 'Form' => [
                     'fields' => ['username' => 'correo', 'password' => 'contrasena'],
