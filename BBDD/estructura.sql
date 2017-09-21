@@ -46,19 +46,6 @@ CREATE TABLE cuentas_usuarios (
     CONSTRAINT ctausr_fk_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 
-
-CREATE TABLE transacciones (
-    id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-    correlativo int UNSIGNED NOT NULL,
-    monto decimal(15,2) NOT NULL,
-    cuenta_id mediumint UNSIGNED NOT NULL,
-    estado enum('Solicitado','Autorizado','Rechazado') NOT NULL,
-    tipo enum('Deposito','Transferencia') NOT NULL,
-
-    CONSTRAINT transacciones_pk_id PRIMARY KEY (id),
-    CONSTRAINT transacciones_fk_cuenta FOREIGN KEY (cuenta_id) REFERENCES cuentas(id)
-);
-
 CREATE TABLE beneficiarios (
     id mediumint UNSIGNED NOT NULL AUTO_INCREMENT,
     monto_max decimal(15,2) UNSIGNED NOT NULL,
@@ -77,3 +64,16 @@ CREATE TABLE beneficiarios (
     CONSTRAINT beneficiarios_fk_cuenta FOREIGN key (cuenta_id) REFERENCES cuentas(id)
 );
 #alter table beneficiarios add column vigente boolean not null default false;
+
+CREATE TABLE transacciones (
+    id bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+    correlativo int UNSIGNED NOT NULL,
+    monto decimal(15,2) NOT NULL,
+    cuenta_id mediumint UNSIGNED NOT NULL,
+    estado enum('Solicitado','Autorizado','Rechazado') NOT NULL,
+    tipo enum('Deposito','Transferencia') NOT NULL,
+
+    CONSTRAINT transacciones_pk_id PRIMARY KEY (id),
+    CONSTRAINT transacciones_fk_cuenta FOREIGN KEY (cuenta_id) REFERENCES cuentas(id)
+);
+#alter table transacciones add column fechahora datetime not null default current_timestamp;
