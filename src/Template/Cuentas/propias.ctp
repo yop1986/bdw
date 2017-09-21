@@ -7,6 +7,10 @@
 
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
+        <li class="heading"><?= __('Perfil') ?></li>
+        <li><?= $this->Html->link(__('Editar Perfil'), ['controller' => 'Usuarios', 'action' => 'edit']) ?></li>
+    </ul>
+    <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('List Beneficiarios'), ['controller' => 'Beneficiarios', 'action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New Beneficiario'), ['controller' => 'Beneficiarios', 'action' => 'add']) ?> </li>

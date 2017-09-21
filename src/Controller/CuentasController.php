@@ -70,11 +70,11 @@ class CuentasController extends AppController
             'contain' => ['Usuarios']
         ]);
 
-        if($this->Auth->User('grupo') == 'Administrador' or $this->Auth->User('id') == $cuenta->usuarios[0]->id) {
+        if($this->Auth->User('grupo') == 'Administrador' or (isset($cuenta->usuarios[0]) and $this->Auth->User('id') == $cuenta->usuarios[0]->id )) {
             $grupoAuth = $this->Auth->User('grupo');
 
             $this->set(compact('cuenta', 'grupoAuth'));
-            //$this->set('_serialize', ['cuenta']);
+
         } else {
             $this->Flash->error(__('¡Solamente puede ver sus propias cuentas!'));
             $this->redirect(['action' => 'propias']);
@@ -114,24 +114,32 @@ class CuentasController extends AppController
      */
     public function edit($id = null)
     {
-        $cuenta = $this->Cuentas->get($id);
+        $cuenta = $this->Cuentas->get($id, [
+            'contain' => ['Usuarios']
+        ]);
         $ctaNum = $cuenta['cuenta'];
 
-        $grupoAuth = $this->Auth->User('grupo');
+        if($this->Auth->User('grupo') == 'Administrador' or (isset($cuenta->usuarios[0]) and $this->Auth->User('id') == $cuenta->usuarios[0]->id )) {
 
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $cuenta = $this->Cuentas->patchEntity($cuenta, $this->request->getData());
-            $cuenta['cuenta'] = $ctaNum;
-            
-            if ($this->Cuentas->save($cuenta)) {
-                $this->Flash->success(__('The cuenta has been saved.'));
+            $grupoAuth = $this->Auth->User('grupo');
 
-                return $this->redirect(['action' => 'index']);
+            if ($this->request->is(['patch', 'post', 'put'])) {
+                $cuenta = $this->Cuentas->patchEntity($cuenta, $this->request->getData());
+                $cuenta['cuenta'] = $ctaNum;
+                
+                if ($this->Cuentas->save($cuenta)) {
+                    $this->Flash->success(__('The cuenta has been saved.'));
+
+                    return $this->redirect(['action' => 'index']);
+                }
+                $this->Flash->error(__('The cuenta could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The cuenta could not be saved. Please, try again.'));
+            $this->set(compact('cuenta', 'grupoAuth'));
+            $this->set('_serialize', ['cuenta']);
+        } else {
+            $this->Flash->error(__('¡Solamente puede modificar sus propias cuentas!'));
+            $this->redirect(['action' => 'propias']);
         }
-        $this->set(compact('cuenta', 'grupoAuth'));
-        $this->set('_serialize', ['cuenta']);
     }
 
     /**

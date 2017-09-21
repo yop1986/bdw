@@ -193,7 +193,7 @@ class UsuariosController extends AppController
 
                 $usrLogueado = $this->request->session()->read('Auth.User');
 
-                if($usrLogueado['grupo'] == 'Administrador'){
+                if($usrLogueado['grupo'] === 'Administrador'){
                     return $this->redirect(['controller' => 'Usuarios', 'action' => 'index']);
                 } elseif ($usrLogueado['grupo'] == 'Cliente') {
                     return $this->redirect(['controller' => 'Cuentas', 'action' => 'propias']);

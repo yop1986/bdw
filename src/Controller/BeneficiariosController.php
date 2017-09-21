@@ -40,7 +40,11 @@ class BeneficiariosController extends AppController
         $this->paginate = [
             'contain' => ['Usuarios', 'Cuentas']
         ];
-        $beneficiarios = $this->paginate($this->Beneficiarios);
+        $beneficiarios = $this->paginate(
+            $this->Beneficiarios
+                ->find()
+                ->where(['beneficiarios.usuario_id' => $this->Auth->User('id')])
+            );
 
         $this->set(compact('beneficiarios'));
         $this->set('_serialize', ['beneficiarios']);
@@ -59,8 +63,14 @@ class BeneficiariosController extends AppController
             'contain' => ['Usuarios', 'Cuentas']
         ]);
 
-        $this->set('beneficiario', $beneficiario);
-        $this->set('_serialize', ['beneficiario']);
+        if ($this->Auth->User('grupo') === 'Administrador' or $this->Auth->User('id') == $beneficiario->usuario_id)
+        {
+            $this->set('beneficiario', $beneficiario);
+            $this->set('_serialize', ['beneficiario']);
+        }else{
+            $this->Flash->error(__('¡Solamente puede ver los beneficiarios asociados a su cuenta!'));
+            $this->redirect(['action' => 'index']);
+        }
     }
 
     /**
@@ -87,20 +97,32 @@ class BeneficiariosController extends AppController
                 $this->Cuentas->find()
                     ->select(['id'])
                     ->where(['cuentas.cuenta' => $noCuenta])
-                )->first();
+                )->first()->id;
 
             if (!is_null($idCuenta)) //existe la cuenta
             {
+                $this->checkBenef = TableRegistry::get('beneficiarios');
+                $idBenef = (
+                    $this->checkBenef->find()
+                        ->select(['id'])
+                        ->where(['beneficiarios.cuenta_id' => $idCuenta, 'beneficiarios.usuario_id' => $this->Auth->User('id')])
+                )->first();
+
+                if (!is_null($idBenef)){
+                    $this->Flash->error(__('La cuenta ya es beneficiaria del usuario.'));
+                    return $this->redirect(['action' => 'index']);
+                }
+
                 $this->CuentasUsuarios = TableRegistry::get('cuentas_usuarios');
                 $infoAsoc = (
                     $this->CuentasUsuarios->find()
                         ->select(['id'])
-                        ->where(['cuentas_usuarios.cuenta_id' => $idCuenta->id, 'cuentas_usuarios.usuario_id' => $this->Auth->User('id')])
+                        ->where(['cuentas_usuarios.cuenta_id' => $idCuenta, 'cuentas_usuarios.usuario_id' => $this->Auth->User('id')])
                     )->first();
 
                 if (is_null($infoAsoc)) //La cuenta no pertenece la usuario logueado
                 {
-                    $beneficiario->cuenta_id = $idCuenta->id;
+                    $beneficiario->cuenta_id = $idCuenta;
                     if ($this->Beneficiarios->save($beneficiario)) {
 
                         $email = new Email();
@@ -109,10 +131,10 @@ class BeneficiariosController extends AppController
                             ->template('confirmacion_beneficiario', 'default')
                             ->emailFormat('html')
                             ->to($this->Auth->User('correo'))
-                            //->viewVars(['contenido' => ["controller" => 'Beneficiarios', 'action' => 'activacion-beneficiario', $noCuenta, $beneficiario->clave]])
+                            ->viewVars(['contenido' => ['controller' => 'Beneficiarios', 'action' => 'activacion-beneficiario', $noCuenta, $beneficiario->clave]])
                             ->send();
 
-                        $this->Flash->success(__('The beneficiario has been saved.'));
+                        $this->Flash->success(__('The beneficiario has been saved....'));
                         return $this->redirect(['action' => 'index']);
                     }
                     $this->Flash->error(__('The beneficiario could not be saved. Please, try again.'));
@@ -146,19 +168,26 @@ class BeneficiariosController extends AppController
         $beneficiario = $this->Beneficiarios->get($id, [
             'contain' => []
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $beneficiario = $this->Beneficiarios->patchEntity($beneficiario, $this->request->getData());
-            if ($this->Beneficiarios->save($beneficiario)) {
-                $this->Flash->success(__('The beneficiario has been saved.'));
+        if ($this->Auth->User('grupo') === 'Administrador' or $this->Auth->User('id') == $beneficiario->usuario_id)
+        {
+            if ($this->request->is(['patch', 'post', 'put'])) {
+                $beneficiario = $this->Beneficiarios->patchEntity($beneficiario, $this->request->getData());
+                if ($this->Beneficiarios->save($beneficiario)) {
+                    $this->Flash->success(__('The beneficiario has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['action' => 'index']);
+                }
+                $this->Flash->error(__('The beneficiario could not be saved. Please, try again.'));
             }
-            $this->Flash->error(__('The beneficiario could not be saved. Please, try again.'));
+            $usuarios = $this->Beneficiarios->Usuarios->find('list', ['limit' => 200]);
+            $cuenta = $this->Beneficiarios->Cuentas->get($beneficiario->cuenta_id)->cuenta;
+            $this->set(compact('beneficiario', 'cuenta'));
+            $this->set('_serialize', ['beneficiario']);
+        }else{
+            $this->Flash->error(__('¡Solamente puede editar los beneficiarios asociados a su cuenta!'));
+            $this->redirect(['action' => 'index']);
         }
-        $usuarios = $this->Beneficiarios->Usuarios->find('list', ['limit' => 200]);
-        $cuenta = $this->Beneficiarios->Cuentas->get($beneficiario->cuenta_id)->cuenta;
-        $this->set(compact('beneficiario', 'cuenta'));
-        $this->set('_serialize', ['beneficiario']);
+        
     }
 
     /**
