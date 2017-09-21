@@ -16,6 +16,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $modificado
  * @property bool $activo
  * @property string $grupo
+ * @property string $clave
  *
  * @property \App\Model\Entity\Cuenta[] $cuentas
  */

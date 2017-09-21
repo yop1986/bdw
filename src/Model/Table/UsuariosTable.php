@@ -95,6 +95,11 @@ class UsuariosTable extends Table
             ->requirePresence('grupo', 'create')
             ->notEmpty('grupo');
 
+        $validator
+            ->scalar('clave')
+            ->requirePresence('clave', 'create')
+            ->notEmpty('clave');
+
         return $validator;
     }
 

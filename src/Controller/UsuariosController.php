@@ -74,6 +74,7 @@ class UsuariosController extends AppController
             $usuario->creado = Time::Now();
             $usuario->activo = 0;
             $usuario->grupo = 'Cliente';
+            $usuario->clave = $this->generateRandomString();
 
 
             $this->Cuentas = TableRegistry::get('cuentas');
@@ -110,7 +111,7 @@ class UsuariosController extends AppController
                         ->template('ConfirmacionUsuario', 'default')
                         ->emailFormat('html')
                         ->to($usuario->correo)
-                        ->viewVars(['contenido' => ["controller" => 'Usuarios', 'action' => 'activacion-usuario', $usuario->id, substr($usuario->contrasena, 0, 10)]])
+                        ->viewVars(['contenido' => ["controller" => 'Usuarios', 'action' => 'activacion-usuario', $usuario->id, $usuario->clave]])
                         ->send();
 
                     $this->Flash->success(__('El usuario fue guardado, por favor confirme desde su correo.'));
@@ -238,13 +239,15 @@ class UsuariosController extends AppController
                     ->find()
                     ->where([
                         'usuarios.id ='.$id, 
-                        'usuarios.contrasena like' => $clave.'%', 
+                        'usuarios.clave' => $clave, 
                         'usuarios.activo' => false
                     ])
                     ->first();
 
         if (!is_null($usuario)) {
-            $usuario = $this->Usuarios->patchEntity($usuario, [$usuario['activo'] = !$usuario['activo']]);
+            $usuario = $this->Usuarios->patchEntity($usuario, []);
+            $usuario->activo = !$usuario->activo;
+            $usuario->clave = '';
 
             if ($this->Usuarios->save($usuario)) {
                 $this->Flash->success(__('Se ha activado el usuario (' . $usuario['nombre'] . ').'));
