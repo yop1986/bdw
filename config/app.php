@@ -178,15 +178,15 @@ return [
      */
     'EmailTransport' => [
         'default' => [
-            'className' => 'Debug',
+            'className' => 'Smtp',
             // The following keys are used in SMTP transports
-            'host' => 'localhost',
-            'port' => 25,
+            'host' => 'smtp.gmail.com',
+            'port' => 587,
             'timeout' => 30,
-            'username' => 'user',
-            'password' => 'secret',
+            'username' => 'sabegamo85@gmail.com',
+            'password' => 'MarianaSofia',
             'client' => null,
-            'tls' => null,
+            'tls' => true,
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
         ],
     ],
