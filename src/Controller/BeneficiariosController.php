@@ -131,7 +131,7 @@ class BeneficiariosController extends AppController
                             ->template('confirmacion_beneficiario', 'default')
                             ->emailFormat('html')
                             ->to($this->Auth->User('correo'))
-                            ->viewVars(['contenido' => ['controller' => 'Beneficiarios', 'action' => 'activacion-beneficiario', $noCuenta, $beneficiario->clave]])
+                            ->viewVars(['contenido' => ['controller' => 'Beneficiarios', 'action' => 'activacion-beneficiario', $noCuenta, $beneficiario->clave, '_full' => true]])
                             ->send();
 
                         $this->Flash->success(__('The beneficiario has been saved....'));

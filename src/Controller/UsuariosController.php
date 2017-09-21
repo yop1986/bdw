@@ -111,7 +111,7 @@ class UsuariosController extends AppController
                         ->template('ConfirmacionUsuario', 'default')
                         ->emailFormat('html')
                         ->to($usuario->correo)
-                        ->viewVars(['contenido' => ["controller" => 'Usuarios', 'action' => 'activacion-usuario', $usuario->id, $usuario->clave]])
+                        ->viewVars(['contenido' => ["controller" => 'Usuarios', 'action' => 'activacion-usuario', $usuario->id, $usuario->clave, '_full' => true]])
                         ->send();
 
                     $this->Flash->success(__('El usuario fue guardado, por favor confirme desde su correo.'));
