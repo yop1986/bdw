@@ -11,10 +11,12 @@ CREATE TABLE usuarios (
     modificado datetime DEFAULT NULL,
     activo tinyint(1) NOT NULL DEFAULT 0,
     grupo enum('Administrador','Cliente') NOT NULL DEFAULT 'Cliente',
+    clave varchar(15) NOT NULL,
 
     CONSTRAINT usuarios_pk_id PRIMARY KEY (id),
     CONSTRAINT usuarios_unq_correo UNIQUE (correo)
 );
+#alter table usuarios add column clave varchar(15) NOT NULL;
 INSERT INTO `usuarios` (`id`, `nombre`, `correo`, `telefono`, `contrasena`, `creado`, `modificado`, `activo`, `grupo`) VALUES
 (1, 'Pablo Godoy', 'pablodavid36@gmail.com', '56940955', '$2y$10$wWcA6CFHg/hm1GrGJEdCcO.MCPWPWZ3QRgdnQ5jXjYeNOnc9HDCHi', '2017-09-13 23:00:49', '2017-09-13 23:07:47', 1, 'Administrador');
 
