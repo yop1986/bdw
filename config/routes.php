@@ -54,6 +54,21 @@ Router::scope('/', function (RouteBuilder $routes) {
     /**
      * ...and connect the rest of 'Pages' controller's URLs.
      */
+    $routes->connect('/ingreso', ['controller' => 'Usuarios', 'action' => 'login']);
+    $routes->connect('/salir', ['controller' => 'Usuarios', 'action' => 'logout']);
+    $routes->connect('/registro', ['controller' => 'Usuarios', 'action' => 'add']);
+    $routes->connect('usuarios/ver/*', ['controller' => 'Usuarios', 'action' => 'view']);
+    $routes->connect('perfil/editar', ['controller' => 'Usuarios', 'action' => 'edit']);
+
+    $routes->connect('cuentas/propias', ['controller' => 'Cuentas', 'action' => 'propias']);
+    $routes->connect('cuentas/nueva', ['controller' => 'Cuentas', 'action' => 'add']);
+    $routes->connect('cuentas/editar/*', ['controller' => 'Cuentas', 'action' => 'edit']);
+    $routes->connect('cuentas/ver/*', ['controller' => 'Cuentas', 'action' => 'view']);
+
+    $routes->connect('beneficiario/ver/*', ['controller' => 'Beneficiarios', 'action' => 'view']);    
+    $routes->connect('beneficiario/nuevo', ['controller' => 'Beneficiarios', 'action' => 'add']);    
+    $routes->connect('beneficiario/editar', ['controller' => 'Beneficiarios', 'action' => 'edit']);    
+
     $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
 
     /**

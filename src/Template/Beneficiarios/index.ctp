@@ -7,8 +7,11 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Cuentas'), ['controller' => 'cuentas', 'action' => 'propias']) ?></li>
-        <li><?= $this->Html->link(__('New Beneficiario'), ['controller' => 'Beneficiarios', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('Listar Beneficiarios'), ['controller' => 'Beneficiarios', 'action' => 'index']) ?> </li>
+        <li><?= $this->Html->link(__('Nuevo Beneficiario'), ['controller' => 'Beneficiarios', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('Transf. Beneficiario'), ['controller' => 'Beneficiarios', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('Depósito'), ['controller' => 'Beneficiarios', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('Estado de Cuenta'), ['controller' => 'Beneficiarios', 'action' => 'add']) ?> </li>
     </ul>
 </nav>
 <div class="beneficiarios index large-9 medium-8 columns content">
@@ -31,8 +34,8 @@
                 <td><?= $this->Number->format($beneficiario->cant_max) ?></td>
                 <td><?= h($beneficiario->ult_proceso) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $beneficiario->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $beneficiario->id]) ?>
+                    <?= $this->Html->link(__('View'), ['action' => 'view', $beneficiario->id]) ?> | 
+                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $beneficiario->id]) ?> | 
                     <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $beneficiario->id], ['confirm' => __('Are you sure you want to delete # {0}?', $beneficiario->id)]) ?>
                 </td>
             </tr>

@@ -7,7 +7,9 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Usuarios'), ['action' => 'index']) ?> </li>
+        <li><?= $this->Html->link(__('Listar Cuentas'), ['controller' => 'Cuentas', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Nueva Cuenta'), ['controller' => 'Cuentas', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('Sol. Depósitos'), ['controller' => 'Transferencias', 'action' => 'deposito']) ?></li>
     </ul>
 </nav>
 <div class="usuarios view large-9 medium-8 columns content">
@@ -38,37 +40,4 @@
             <td><?= $usuario->activo ? __('Active') : __('Deactive'); ?></td>
         </tr>
     </table>
-    <div class="related">
-        <h4><?= __('Related Cuentas') ?></h4>
-        <?php if (!empty($usuario->cuentas)): ?>
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-                <th scope="col"><?= __('Id') ?></th>
-                <th scope="col"><?= __('Nombre') ?></th>
-                <th scope="col"><?= __('Cuenta') ?></th>
-                <th scope="col"><?= __('Balance') ?></th>
-                <th scope="col"><?= __('Reserva') ?></th>
-                <th scope="col"><?= __('Usuario Id') ?></th>
-                <th scope="col"><?= __('Creado') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-            <?php foreach ($usuario->cuentas as $cuentas): ?>
-            <tr>
-                <td><?= h($cuentas->id) ?></td>
-                <td><?= h($cuentas->nombre) ?></td>
-                <td><?= h($cuentas->cuenta) ?></td>
-                <td><?= h($cuentas->balance) ?></td>
-                <td><?= h($cuentas->reserva) ?></td>
-                <td><?= h($cuentas->usuario_id) ?></td>
-                <td><?= h($cuentas->creado) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Cuentas', 'action' => 'view', $cuentas->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Cuentas', 'action' => 'edit', $cuentas->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Cuentas', 'action' => 'delete', $cuentas->id], ['confirm' => __('Are you sure you want to delete # {0}?', $cuentas->id)]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
-        <?php endif; ?>
-    </div>
 </div>

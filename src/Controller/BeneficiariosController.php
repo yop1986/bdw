@@ -47,6 +47,7 @@ class BeneficiariosController extends AppController
             );
 
         $this->set(compact('beneficiarios'));
+        $this->set('Auth', $this->Auth->User('grupo'));
         $this->set('_serialize', ['beneficiarios']);
     }
 
@@ -66,6 +67,7 @@ class BeneficiariosController extends AppController
         if ($this->Auth->User('grupo') === 'Administrador' or $this->Auth->User('id') == $beneficiario->usuario_id)
         {
             $this->set('beneficiario', $beneficiario);
+            $this->set('Auth', $this->Auth->User('grupo'));
             $this->set('_serialize', ['beneficiario']);
         }else{
             $this->Flash->error(__('¡Solamente puede ver los beneficiarios asociados a su cuenta!'));
@@ -134,10 +136,10 @@ class BeneficiariosController extends AppController
                             ->viewVars(['contenido' => ['controller' => 'Beneficiarios', 'action' => 'activacion-beneficiario', $noCuenta, $beneficiario->clave, '_full' => true]])
                             ->send();
 
-                        $this->Flash->success(__('The beneficiario has been saved....'));
+                        $this->Flash->success(__('El beneficiario fue guardado, por favor confirme desde su correo.'));
                         return $this->redirect(['action' => 'index']);
                     }
-                    $this->Flash->error(__('The beneficiario could not be saved. Please, try again.'));
+                    $this->Flash->error(__('El beneficiario no fue guardado, por favor intente de nuevo.'));
                 }
                 else
                 {
@@ -153,6 +155,7 @@ class BeneficiariosController extends AppController
             */
         }
         $this->set(compact('beneficiario'));
+        $this->set('Auth', $this->Auth->User('grupo'));
         $this->set('_serialize', ['beneficiario']);
     }
 
@@ -182,6 +185,7 @@ class BeneficiariosController extends AppController
             $usuarios = $this->Beneficiarios->Usuarios->find('list', ['limit' => 200]);
             $cuenta = $this->Beneficiarios->Cuentas->get($beneficiario->cuenta_id)->cuenta;
             $this->set(compact('beneficiario', 'cuenta'));
+            $this->set('Auth', $this->Auth->User('grupo'));
             $this->set('_serialize', ['beneficiario']);
         }else{
             $this->Flash->error(__('¡Solamente puede editar los beneficiarios asociados a su cuenta!'));

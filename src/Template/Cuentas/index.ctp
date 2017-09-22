@@ -4,11 +4,12 @@
   * @var \App\Model\Entity\Cuenta[]|\Cake\Collection\CollectionInterface $cuentas
   */
 ?>
-
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Usuarios'), ['controller' => 'Usuarios', 'action' => 'index']) ?> </li>
+        <li><?= $this->Html->link(__('Listar Cuentas'), ['controller' => 'Cuentas', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Nueva Cuenta'), ['controller' => 'Cuentas', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('Sol. Depósitos'), ['controller' => 'Transferencias', 'action' => 'deposito']) ?></li>
     </ul>
 </nav>
 <div class="cuentas index large-9 medium-8 columns content">

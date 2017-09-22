@@ -33,6 +33,7 @@ class CuentasController extends AppController
         $cuentas = $this->paginate($this->Cuentas);
 
         $this->set(compact('cuentas'));
+        $this->set('Auth', $this->Auth->User('grupo'));
         $this->set('_serialize', ['cuentas']);
     }
 
@@ -54,6 +55,7 @@ class CuentasController extends AppController
         ]));
 
         $this->set(compact('cuentas'));
+        $this->set('Auth', $this->Auth->User('grupo'));
         $this->set('_serialize', ['cuentas']);
     }
 
@@ -71,8 +73,8 @@ class CuentasController extends AppController
         ]);
 
         if($this->Auth->User('grupo') == 'Administrador' or (isset($cuenta->usuarios[0]) and $this->Auth->User('id') == $cuenta->usuarios[0]->id )) {
-            $grupoAuth = $this->Auth->User('grupo');
-
+            
+            $this->set('Auth', $this->Auth->User('grupo'));
             $this->set(compact('cuenta', 'grupoAuth'));
 
         } else {
@@ -102,6 +104,7 @@ class CuentasController extends AppController
             $this->Flash->error(__('The cuenta could not be saved. Please, try again.'));
         }
         $this->set(compact('cuenta'));
+        $this->set('Auth', $this->Auth->User('grupo'));
         $this->set('_serialize', ['cuenta']);
     }
 
@@ -121,8 +124,6 @@ class CuentasController extends AppController
 
         if($this->Auth->User('grupo') == 'Administrador' or (isset($cuenta->usuarios[0]) and $this->Auth->User('id') == $cuenta->usuarios[0]->id )) {
 
-            $grupoAuth = $this->Auth->User('grupo');
-
             if ($this->request->is(['patch', 'post', 'put'])) {
                 $cuenta = $this->Cuentas->patchEntity($cuenta, $this->request->getData());
                 $cuenta['cuenta'] = $ctaNum;
@@ -134,7 +135,8 @@ class CuentasController extends AppController
                 }
                 $this->Flash->error(__('The cuenta could not be saved. Please, try again.'));
             }
-            $this->set(compact('cuenta', 'grupoAuth'));
+            $this->set(compact('cuenta'));
+            $this->set('Auth', $this->Auth->User('grupo'));
             $this->set('_serialize', ['cuenta']);
         } else {
             $this->Flash->error(__('¡Solamente puede modificar sus propias cuentas!'));

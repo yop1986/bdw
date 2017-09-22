@@ -1,0 +1,32 @@
+msgid "Actions"
+msgstr "Opciones"
+
+msgid "Submit"
+msgstr "Enviar"
+
+msgid "Login"
+msgstr "Ingresar"
+
+msgid "View"
+msgstr "Ver"
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Delete"
+msgstr "Eliminar"
+
+msgid "first"
+msgstr "primero"
+
+msgid "previous"
+msgstr "anterior"
+
+msgid "next"
+msgstr "siguiente"
+
+msgid "last"
+msgstr "último"
+
+msgid "Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total"
+msgstr "Página {{page}} de {{pages}}, mostrando {{current}} registro(s) de {{count}}"

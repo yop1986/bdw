@@ -7,7 +7,17 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $grupoAuth == 'Cliente' ? $this->Html->link(__('List Cuentas'), ['action' => 'propias']) : $this->Html->link(__('List Cuentas'), ['action' => 'index']) ?> </li>
+    <?php if($Auth == 'Administrador'): ?>
+        <li><?= $this->Html->link(__('Listar Cuentas'), ['controller' => 'Cuentas', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Nueva Cuenta'), ['controller' => 'Cuentas', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('Sol. Depósitos'), ['controller' => 'Transferencias', 'action' => 'deposito']) ?></li>
+    <?php else: ?>
+        <li><?= $this->Html->link(__('Listar Beneficiarios'), ['controller' => 'Beneficiarios', 'action' => 'index']) ?> </li>
+        <li><?= $this->Html->link(__('Nuevo Beneficiario'), ['controller' => 'Beneficiarios', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('Transf. Beneficiario'), ['controller' => 'Beneficiarios', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('Depósito'), ['controller' => 'Beneficiarios', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('Estado de Cuenta'), ['controller' => 'Beneficiarios', 'action' => 'add']) ?> </li>
+    <?php endif; ?>
     </ul>
 </nav>
 <div class="cuentas view large-9 medium-8 columns content">
@@ -34,35 +44,4 @@
             <td><?= $cuenta->usuarios ? __($cuenta->usuarios[0]['nombre']) : __('Sin usuario asociado') ?></td>
         </tr>
     </table>
-    <div class="related">
-        <h4><?= __('Related Transacciones') ?></h4>
-        <?php if (!empty($cuenta->transacciones)): ?>
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-                <th scope="col"><?= __('Id') ?></th>
-                <th scope="col"><?= __('Correlativo') ?></th>
-                <th scope="col"><?= __('Monto') ?></th>
-                <th scope="col"><?= __('Cuenta Id') ?></th>
-                <th scope="col"><?= __('Estado') ?></th>
-                <th scope="col"><?= __('Tipo') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
-            <?php foreach ($cuenta->transacciones as $transacciones): ?>
-            <tr>
-                <td><?= h($transacciones->id) ?></td>
-                <td><?= h($transacciones->correlativo) ?></td>
-                <td><?= h($transacciones->monto) ?></td>
-                <td><?= h($transacciones->cuenta_id) ?></td>
-                <td><?= h($transacciones->estado) ?></td>
-                <td><?= h($transacciones->tipo) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Transacciones', 'action' => 'view', $transacciones->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Transacciones', 'action' => 'edit', $transacciones->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Transacciones', 'action' => 'delete', $transacciones->id], ['confirm' => __('Are you sure you want to delete # {0}?', $transacciones->id)]) ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
-        <?php endif; ?>
-    </div>
 </div>
