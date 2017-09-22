@@ -72,6 +72,7 @@ CREATE TABLE transacciones (
     cuenta_id mediumint UNSIGNED NOT NULL,
     estado enum('Solicitado','Autorizado','Rechazado') NOT NULL,
     tipo enum('Deposito','Transferencia') NOT NULL,
+    fechahora datetime not null default current_timestamp,
 
     CONSTRAINT transacciones_pk_id PRIMARY KEY (id),
     CONSTRAINT transacciones_fk_cuenta FOREIGN KEY (cuenta_id) REFERENCES cuentas(id)
