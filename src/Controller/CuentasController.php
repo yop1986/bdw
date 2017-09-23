@@ -97,11 +97,11 @@ class CuentasController extends AppController
             $cuenta['creado'] = Time::Now();
 
             if ($this->Cuentas->save($cuenta)) {
-                $this->Flash->success(__('The cuenta has been saved.'));
+                $this->Flash->success(__('La cuenta fue guardada.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The cuenta could not be saved. Please, try again.'));
+            $this->Flash->error(__('La cuenta no fue guardada, por favor intente de nuevo.'));
         }
         $this->set(compact('cuenta'));
         $this->set('Auth', $this->Auth->User('grupo'));
@@ -129,11 +129,11 @@ class CuentasController extends AppController
                 $cuenta['cuenta'] = $ctaNum;
                 
                 if ($this->Cuentas->save($cuenta)) {
-                    $this->Flash->success(__('The cuenta has been saved.'));
+                    $this->Flash->success(__('La cuenta fue actualizada.'));
 
                     return $this->redirect(['action' => 'index']);
                 }
-                $this->Flash->error(__('The cuenta could not be saved. Please, try again.'));
+                $this->Flash->error(__('La cuenta no fue actualizada, por favor intente de nuevo.'));
             }
             $this->set(compact('cuenta'));
             $this->set('Auth', $this->Auth->User('grupo'));
@@ -156,9 +156,9 @@ class CuentasController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $cuenta = $this->Cuentas->get($id);
         if ($this->Cuentas->delete($cuenta)) {
-            $this->Flash->success(__('The cuenta has been deleted.'));
+            $this->Flash->success(__('La cuenta fue eliminada.'));
         } else {
-            $this->Flash->error(__('The cuenta could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La cuenta no fue eliminada, por favor intente de nuevo.'));
         }
 
         return $this->redirect(['action' => 'index']);
