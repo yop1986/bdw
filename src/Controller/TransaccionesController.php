@@ -188,33 +188,11 @@ class TransaccionesController extends AppController
                 );
                 $stmt->execute();
 
-
-                //var_dump($stmt); exit;
                 $conn->commit();
+                return $this->redirect(['controller' => 'Cuentas', 'action' => 'propias']);
             } else {
                 $this->Flash->error('No tiene dinero disponible para la transaccion.');
             }
-            
-            /*
-
-
-            $transaccion = $this->Transacciones->patchEntity($transaccion, $this->request->getData());
-            $transaccion->correlativo = $correlativo + 1;
-            $transaccion->estado = 'Autorizado';
-            $transaccion->tipo = 'Transferencia';
-            $transaccion->fechahora = Time::Now();
-
-            unset($transaccion->ctaDestino);
-
-            var_dump($transaccion); exit;
-            if ($this->Transacciones->save($transaccion)) {
-                $this->Flash->success(__('The transaccion has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-
-            $this->Flash->error(__('The transaccion could not be saved. Please, try again.'));
-            */
         }
         $cuentas = $this->Transacciones->Cuentas->find('list', ['limit' => 200])->join( [
             'table' => 'cuentas_usuarios', 
@@ -228,15 +206,9 @@ class TransaccionesController extends AppController
             'type' => 'inner', 
             'conditions' => ['Cuentas.id = Benef.cuenta_id', 'Benef.usuario_id' => $this->Auth->User('id')]
         ]);
-        //var_dump($ctasDestino); exit;
-        /*$ctasDestino = $this->Transacciones->Cuentas->find('list', ['limit' => 200])->join( [
-                'table' => 'cuentas_usuarios', 
-                'alias' => 'CtasUsrs',
-                'type' => 'inner', 
-                'conditions' => ['CtasUsrs.cuenta_id = Cuentas.id', 'CtasUsrs.usuario_id' => $this->Auth->User('id')]
-            ]);
-            */
+
         $this->set(compact('transaccion', 'cuentas', 'ctasDestino'));
+        $this->set('Auth', $this->Auth->User('grupo'));
         $this->set('_serialize', ['transaccion']);
     }
 }
