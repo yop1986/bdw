@@ -136,10 +136,10 @@ class TransaccionesController extends AppController
                 $conn->begin();
                 
                 $stmt = $conn->prepare('INSERT INTO transacciones (correlativo, monto, cuenta_id, estado, tipo, fechahora) 
-                    values (:correlativo, :monto, :cuenta_id, :estado, :tipo, :fechahora)');
+                    VALUES (:correlativo, :monto, :cuenta_id, :estado, :tipo, :fechahora)');
                 $stmt->bind([
                     'correlativo' => $correlativo,
-                    'monto' => $this->request->getData()['monto'],
+                    'monto' => -$this->request->getData()['monto'],
                     'cuenta_id' => $this->request->getData()['cuenta_id'],
                     'estado' => 'Autorizado',
                     'tipo' => 'Transferencia',
@@ -172,6 +172,20 @@ class TransaccionesController extends AppController
                     'tipo' => 'string',
                     'fechahora' => 'datetime'
                 ]);
+                $stmt->execute();
+
+                $stmt = $conn->prepare('UPDATE cuentas SET balance = balance - :monto WHERE id = :id;');
+                $stmt->bind(
+                    ['monto' => $this->request->getData()['monto'], 'id' => $this->request->getData()['cuenta_id']], 
+                    ['monto' => 'decimal', 'id' => 'integer']
+                );
+                $stmt->execute();
+
+                $stmt = $conn->prepare('UPDATE cuentas SET balance = balance + :monto WHERE id = :id;');
+                $stmt->bind(
+                    ['monto' => $this->request->getData()['monto'], 'id' => $this->request->getData()['ctaDestino']], 
+                    ['monto' => 'decimal', 'id' => 'integer']
+                );
                 $stmt->execute();
 
 
