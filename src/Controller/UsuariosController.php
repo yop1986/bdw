@@ -74,7 +74,7 @@ class UsuariosController extends AppController
         if ($this->request->is('post')) {
             $usuario = $this->Usuarios->patchEntity($usuario, $this->request->getData());
             $usuario->creado = Time::Now();
-            $usuario->activo = 0;
+            $usuario->activo = 1;
             $usuario->grupo = 'Cliente';
             $usuario->clave = $this->generateRandomString();
 
@@ -107,14 +107,18 @@ class UsuariosController extends AppController
 
                     $this->CuentasUsuarios->save($infoAsoc);
 
-                    $email = new Email();
-                    $email
-                        ->subject('Confirmación de Usuario BDW')
-                        ->template('ConfirmacionUsuario', 'default')
-                        ->emailFormat('html')
-                        ->to($usuario->correo)
-                        ->viewVars(['contenido' => ["controller" => 'Usuarios', 'action' => 'activacion-usuario', $usuario->id, $usuario->clave, '_full' => true]])
-                        ->send();
+                    if(!$usuario->activo)
+                    {
+                        $email = new Email();
+                        $email
+                            ->subject('Confirmación de Usuario BDW')
+                            ->template('ConfirmacionUsuario', 'default')
+                            ->emailFormat('html')
+                            ->to($usuario->correo)
+                            ->viewVars(['contenido' => ["controller" => 'Usuarios', 'action' => 'activacion-usuario', $usuario->id, $usuario->clave, '_full' => true]])
+                            ->send();
+                    }
+                    
 
                     $this->Flash->success(__('El usuario fue guardado, por favor confirme desde su correo.'));
                     return $this->redirect(['action' => 'login']);

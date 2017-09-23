@@ -90,7 +90,7 @@ class BeneficiariosController extends AppController
             $beneficiario->ult_proceso = Time::Now();
             $beneficiario->clave = $this->generateRandomString();
             $beneficiario->usuario_id = $this->Auth->User('id');
-            $beneficiario->vigente = false;
+            $beneficiario->vigente = 1;
 
             $noCuenta = $this->request->getData()['noCuenta'];
 
@@ -127,14 +127,17 @@ class BeneficiariosController extends AppController
                     $beneficiario->cuenta_id = $idCuenta;
                     if ($this->Beneficiarios->save($beneficiario)) {
 
-                        $email = new Email();
-                        $email
-                            ->subject('Confirmación para Asociacion de Beneficiario')
-                            ->template('confirmacion_beneficiario', 'default')
-                            ->emailFormat('html')
-                            ->to($this->Auth->User('correo'))
-                            ->viewVars(['contenido' => ['controller' => 'Beneficiarios', 'action' => 'activacion-beneficiario', $noCuenta, $beneficiario->clave, '_full' => true]])
-                            ->send();
+                        if (!$beneficiario->vigente)
+                        {
+                            $email = new Email();
+                            $email
+                                ->subject('Confirmación para Asociacion de Beneficiario')
+                                ->template('confirmacion_beneficiario', 'default')
+                                ->emailFormat('html')
+                                ->to($this->Auth->User('correo'))
+                                ->viewVars(['contenido' => ['controller' => 'Beneficiarios', 'action' => 'activacion-beneficiario', $noCuenta, $beneficiario->clave, '_full' => true]])
+                                ->send();
+                        }
 
                         $this->Flash->success(__('El beneficiario fue guardado, por favor confirme desde su correo.'));
                         return $this->redirect(['action' => 'index']);

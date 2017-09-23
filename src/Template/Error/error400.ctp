@@ -1,4 +1,7 @@
 <?php
+header("Location: http://".$_SERVER['SERVER_NAME']); /* Redirect browser */
+exit();
+
 use Cake\Core\Configure;
 use Cake\Error\Debugger;
 

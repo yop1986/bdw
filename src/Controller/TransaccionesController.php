@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Datasource\ConnectionManager;
 use Cake\Event\Event;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry; 
@@ -25,7 +26,7 @@ class TransaccionesController extends AppController
 
     public function isAuthorized($usuario) 
     {
-        if (in_array($this->request->getParam('action'), ['deposito']))
+        if (in_array($this->request->getParam('action'), ['deposito', 'transferencia']))
             return true;
         
         return parent::isAuthorized($usuario);
@@ -119,17 +120,109 @@ class TransaccionesController extends AppController
     public function transferencia()
     {
         $transaccion = $this->Transacciones->newEntity();
+
         if ($this->request->is('post')) {
+            $conn = ConnectionManager::get('default');
+            $trTransacciones = TableRegistry::get('transacciones');
+            
+            $correlativo = $trTransacciones->find()->select(['correlativo' => 'MAX(correlativo)'])->max('correlativo')->correlativo + 1;
+            $fechahora = Time::Now();
+
+            $stmt = $conn->prepare('SELECT balance FROM cuentas WHERE id = :id');
+            $stmt->bind(['id' => $this->request->getData()['cuenta_id']], ['id' => 'integer']);
+            $stmt->execute();
+
+            if ($stmt->fetch('assoc')['balance'] >= $this->request->getData()['monto']){
+                $conn->begin();
+                
+                $stmt = $conn->prepare('INSERT INTO transacciones (correlativo, monto, cuenta_id, estado, tipo, fechahora) 
+                    values (:correlativo, :monto, :cuenta_id, :estado, :tipo, :fechahora)');
+                $stmt->bind([
+                    'correlativo' => $correlativo,
+                    'monto' => $this->request->getData()['monto'],
+                    'cuenta_id' => $this->request->getData()['cuenta_id'],
+                    'estado' => 'Autorizado',
+                    'tipo' => 'Transferencia',
+                    'fechahora' => $fechahora
+                ],
+                [
+                    'correlativo' => 'integer',
+                    'monto' => 'decimal',
+                    'cuenta_id' => 'integer',
+                    'estado' => 'string',
+                    'tipo' => 'string',
+                    'fechahora' => 'datetime'
+                ]);
+                $stmt->execute();
+
+                $stmt->bind(
+                [
+                    'correlativo' => $correlativo,
+                    'monto' => $this->request->getData()['monto'],
+                    'cuenta_id' => $this->request->getData()['ctaDestino'],
+                    'estado' => 'Autorizado',
+                    'tipo' => 'Transferencia',
+                    'fechahora' => $fechahora,
+                ],
+                [
+                    'correlativo' => 'integer',
+                    'monto' => 'decimal',
+                    'cuenta_id' => 'integer',
+                    'estado' => 'string',
+                    'tipo' => 'string',
+                    'fechahora' => 'datetime'
+                ]);
+                $stmt->execute();
+
+
+                //var_dump($stmt); exit;
+                $conn->commit();
+            } else {
+                $this->Flash->error('No tiene dinero disponible para la transaccion.');
+            }
+            
+            /*
+
+
             $transaccion = $this->Transacciones->patchEntity($transaccion, $this->request->getData());
+            $transaccion->correlativo = $correlativo + 1;
+            $transaccion->estado = 'Autorizado';
+            $transaccion->tipo = 'Transferencia';
+            $transaccion->fechahora = Time::Now();
+
+            unset($transaccion->ctaDestino);
+
+            var_dump($transaccion); exit;
             if ($this->Transacciones->save($transaccion)) {
                 $this->Flash->success(__('The transaccion has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
+
             $this->Flash->error(__('The transaccion could not be saved. Please, try again.'));
+            */
         }
-        $cuentas = $this->Transacciones->Cuentas->find('list', ['limit' => 200]);
-        $this->set(compact('transaccion', 'cuentas'));
+        $cuentas = $this->Transacciones->Cuentas->find('list', ['limit' => 200])->join( [
+            'table' => 'cuentas_usuarios', 
+            'alias' => 'CtasUsrs',
+            'type' => 'inner', 
+            'conditions' => ['CtasUsrs.cuenta_id = Cuentas.id', 'CtasUsrs.usuario_id' => $this->Auth->User('id')]
+        ]);
+        $ctasDestino = TableRegistry::get('beneficiarios')->Cuentas->find('list')->join([
+            'table' => 'beneficiarios',
+            'alias' => 'Benef',
+            'type' => 'inner', 
+            'conditions' => ['Cuentas.id = Benef.cuenta_id', 'Benef.usuario_id' => $this->Auth->User('id')]
+        ]);
+        //var_dump($ctasDestino); exit;
+        /*$ctasDestino = $this->Transacciones->Cuentas->find('list', ['limit' => 200])->join( [
+                'table' => 'cuentas_usuarios', 
+                'alias' => 'CtasUsrs',
+                'type' => 'inner', 
+                'conditions' => ['CtasUsrs.cuenta_id = Cuentas.id', 'CtasUsrs.usuario_id' => $this->Auth->User('id')]
+            ]);
+            */
+        $this->set(compact('transaccion', 'cuentas', 'ctasDestino'));
         $this->set('_serialize', ['transaccion']);
     }
 }
