@@ -33,11 +33,11 @@
         </tr>
         <tr>
             <th scope="row"><?= __('Modificado') ?></th>
-            <td><?= $usuario->modificado ? h($usuario->modificado) : __('Never') ?></td>
+            <td><?= $usuario->modificado ? h($usuario->modificado) : __('Nunca') ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Estado') ?></th>
-            <td><?= $usuario->activo ? __('Active') : __('Deactive'); ?></td>
+            <td><?= $usuario->activo ? __('Activo') : __('Inactivo'); ?></td>
         </tr>
     </table>
 </div>
