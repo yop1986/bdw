@@ -117,12 +117,14 @@ class CuentasController extends AppController
      */
     public function edit($id = null)
     {
+        $Auth = $this->Auth->User('grupo');
+
         $cuenta = $this->Cuentas->get($id, [
             'contain' => ['Usuarios']
         ]);
         $ctaNum = $cuenta['cuenta'];
 
-        if($this->Auth->User('grupo') == 'Administrador' or (isset($cuenta->usuarios[0]) and $this->Auth->User('id') == $cuenta->usuarios[0]->id )) {
+        if($Auth == 'Administrador' or (isset($cuenta->usuarios[0]) and $this->Auth->User('id') == $cuenta->usuarios[0]->id )) {
 
             if ($this->request->is(['patch', 'post', 'put'])) {
                 $cuenta = $this->Cuentas->patchEntity($cuenta, $this->request->getData());
@@ -131,12 +133,14 @@ class CuentasController extends AppController
                 if ($this->Cuentas->save($cuenta)) {
                     $this->Flash->success(__('La cuenta fue actualizada.'));
 
+                    if($Auth == 'Cliente')
+                        return $this->redirect(['action' => 'propias']);
+
                     return $this->redirect(['action' => 'index']);
                 }
                 $this->Flash->error(__('La cuenta no fue actualizada, por favor intente de nuevo.'));
             }
-            $this->set(compact('cuenta'));
-            $this->set('Auth', $this->Auth->User('grupo'));
+            $this->set(compact('cuenta', 'Auth'));
             $this->set('_serialize', ['cuenta']);
         } else {
             $this->Flash->error(__('¡Solamente puede modificar sus propias cuentas!'));

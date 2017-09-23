@@ -144,6 +144,8 @@ class UsuariosController extends AppController
      */
     public function edit()
     {
+        $Auth = $this->Auth->User('grupo');
+
         $usuario = $this->Usuarios->get($this->Auth->User('id'), [
             'contain' => []
         ]);
@@ -152,14 +154,16 @@ class UsuariosController extends AppController
             $usuario = $this->Usuarios->patchEntity($usuario, $this->request->getData());
             $usuario['modificado'] = Time::Now();
             if ($this->Usuarios->save($usuario)) {
-                $this->Flash->success(__('The usuario has been saved.'));
+                $this->Flash->success(__('Se ha actualizado el usuario.'));
+
+                if ($Auth == 'Cliente')
+                    return $this->redirect(['controller' => 'Cuentas', 'action' => 'propias']);
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The usuario could not be saved. Please, try again.'));
+            $this->Flash->error(__('El usuario no se pudo actualizar, intente de nuevo.'));
         }
-        $this->set(compact('usuario'));
-        $this->set('Auth', $this->Auth->User('grupo'));
+        $this->set(compact('usuario', 'Auth'));
         $this->set('_serialize', ['usuario']);
     }
 

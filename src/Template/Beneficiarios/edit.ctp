@@ -8,15 +8,14 @@
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Listar Beneficiarios'), ['controller' => 'Beneficiarios', 'action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('Nuevo Beneficiario'), ['controller' => 'Beneficiarios', 'action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('Transf. Beneficiario'), ['controller' => 'Beneficiarios', 'action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('Depósito'), ['controller' => 'Beneficiarios', 'action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('Estado de Cuenta'), ['controller' => 'Beneficiarios', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('Depósito'), ['controller' => 'Transacciones', 'action' => 'deposito']) ?> </li>
+        <li><?= $this->Html->link(__('Transf. Beneficiario'), ['controller' => 'Transacciones', 'action' => 'transferencia']) ?> </li>
     </ul>
 </nav>
 <div class="beneficiarios form large-9 medium-8 columns content">
     <?= $this->Form->create($beneficiario) ?>
     <fieldset>
-        <legend><?= __('Edit Beneficiario') ?></legend>
+        <legend><?= __('Editar Beneficiario') ?></legend>
         <?php
             echo $this->Form->control('monto_max', ['label' => __('Monto Máximo')]);
             echo $this->Form->control('cant_max', [__('Cantidad Máxima de Transacciones')]);

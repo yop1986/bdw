@@ -30,3 +30,6 @@ msgstr "último"
 
 msgid "Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total"
 msgstr "Página {{page}} de {{pages}}, mostrando {{current}} registro(s) de {{count}}"
+
+msgid "Are you sure you want to delete # {0}?"
+msgstr "¿Esta seguro de eliminar el elmeneto # {0}?"
