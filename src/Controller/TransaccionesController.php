@@ -41,7 +41,7 @@ class TransaccionesController extends AppController
         $this->paginate = [
             'contain' => ['Cuentas']
         ];
-        $transacciones = $this->paginate($this->Transacciones->find('all')->where(['transacciones.estado' => 'Solicitado', 'transacciones.tipo' => 'Deposito']));
+        $transacciones = $this->paginate($this->Transacciones->find('all')->where(['Transacciones.estado' => 'Solicitado', 'Transacciones.tipo' => 'Deposito']));
 
         $this->set(compact('transacciones'));
         $this->set('Auth', $this->Auth->User('grupo'));
