@@ -45,7 +45,7 @@
     </table>
 </div>
 
-<?php if (isset($transacciones)): ?>
+<?php if (empty($transacciones)): ?>
 <div class="cuentas view large-9 medium-8 columns content">
     <h4><?= __('Estado de Cuenta (Movimientos)') ?></h4>
     <table cellpadding="0" cellspacing="0">
