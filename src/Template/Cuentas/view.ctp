@@ -44,3 +44,29 @@
         </tr>
     </table>
 </div>
+
+<?php if (isset($transacciones)): ?>
+<div class="cuentas view large-9 medium-8 columns content">
+    <h4><?= __('Estado de Cuenta (Movimientos)') ?></h4>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th scope="col"><?= $this->Paginator->sort('correlativo', ['label' => __('Correlativo')]) ?></th>
+                <th scope="col"><?= $this->Paginator->sort('monto', ['label' => __('Monto')]) ?></th>
+                <th scope="col"><?= $this->Paginator->sort('tipo', ['label' => __('Tipo')]) ?></th>
+                <th scope="col"><?= $this->Paginator->sort('fehcahora', ['label' => __('Fecha/Hora')]) ?></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($transacciones as $trn): ?>
+            <tr>
+                <td><?= $trn['correlativo'] ?></td>
+                <td><?= $this->number->currency($trn['monto']) ?></td>
+                <td><?= $trn['tipo'] ?></td>
+                <td><?= $trn['fechahora'] ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<?php endif; ?>

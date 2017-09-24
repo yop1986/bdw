@@ -75,8 +75,11 @@ class CuentasController extends AppController
         if($this->Auth->User('grupo') == 'Administrador' or (isset($cuenta->usuarios[0]) and $this->Auth->User('id') == $cuenta->usuarios[0]->id )) {
             
             $this->set('Auth', $this->Auth->User('grupo'));
+            $this->set('transacciones', $this->Cuentas->Transacciones
+                ->find()
+                ->select(['correlativo', 'monto', 'tipo', 'fechahora'])
+                ->where(['transacciones.cuenta_id' => $id]));
             $this->set(compact('cuenta', 'grupoAuth'));
-
         } else {
             $this->Flash->error(__('¡Solamente puede ver sus propias cuentas!'));
             $this->redirect(['action' => 'propias']);
